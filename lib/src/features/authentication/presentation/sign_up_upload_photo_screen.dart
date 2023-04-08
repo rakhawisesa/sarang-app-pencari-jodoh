@@ -69,6 +69,7 @@ class _SignUpUploadPhotoScreenState extends State<SignUpUploadPhotoScreen> {
                   onTap: () {
                     showModalBottomSheet(
                       context: context,
+                      backgroundColor: const Color.fromARGB(255, 55, 53, 46),
                       builder: (context) {
                         return Container(
                           padding: const EdgeInsets.all(AppPadding.p24),
@@ -82,6 +83,7 @@ class _SignUpUploadPhotoScreenState extends State<SignUpUploadPhotoScreen> {
                                 icon: const Icon(
                                   Icons.camera,
                                   size: AppSize.s50,
+                                  color: Colors.white,
                                 ),
                               ),
                               IconButton(
@@ -91,6 +93,7 @@ class _SignUpUploadPhotoScreenState extends State<SignUpUploadPhotoScreen> {
                                 icon: const Icon(
                                   Icons.photo,
                                   size: AppSize.s50,
+                                  color: Colors.white,
                                 ),
                               )
                             ],
@@ -125,11 +128,26 @@ class _SignUpUploadPhotoScreenState extends State<SignUpUploadPhotoScreen> {
                 BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, state) {
                     if (state is AuthLoading) {
-                      return const CircularProgressIndicator();
+                      return const Center(child: CircularProgressIndicator());
                     }
                     return CustomButtonWidget(
                       title: "Update My Profile",
                       onTap: () {
+                        if (image == null) {
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                "Please provide an image",
+                                textAlign: TextAlign.center,
+                                style: getWhiteTextStyle().copyWith(
+                                  fontWeight: FontWeightManager.semiBold,
+                                ),
+                              ),
+                            ),
+                          );
+                          return;
+                        }
                         userAccount.imageProfile = image?.path;
                         context.read<AuthBloc>().add(
                               RegisterAuthEvent(

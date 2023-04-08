@@ -33,7 +33,9 @@ class _SignUpAgeJobScreenState extends State<SignUpAgeJobScreen> {
   @override
   void dispose() {
     occupationController.clear();
+    occupationController.dispose();
     ageController.clear();
+    ageController.dispose();
     super.dispose();
   }
 
@@ -75,14 +77,18 @@ class _SignUpAgeJobScreenState extends State<SignUpAgeJobScreen> {
                   onTap: () {
                     final message = validationInput();
                     if (message != null) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
                           content: Text(
-                        message,
-                        textAlign: TextAlign.center,
-                        style: getWhiteTextStyle().copyWith(
-                          fontWeight: FontWeightManager.semiBold,
+                            message,
+                            textAlign: TextAlign.center,
+                            style: getWhiteTextStyle().copyWith(
+                              fontWeight: FontWeightManager.semiBold,
+                            ),
+                          ),
                         ),
-                      )));
+                      );
                       return;
                     }
                     UserAccount userAccount = UserAccount(

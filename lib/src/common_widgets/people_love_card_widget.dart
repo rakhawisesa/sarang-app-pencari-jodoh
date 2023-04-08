@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sarang/src/features/likes_you/domain/user.dart';
 import 'package:sarang/src/features/likes_you/presentation/people_profile_screen.dart';
 import 'package:sarang/src/theme_manager/asset_image_icon_manager.dart';
 import 'package:sarang/src/theme_manager/color_manager.dart';
@@ -7,7 +8,9 @@ import 'package:sarang/src/theme_manager/style_manager.dart';
 import 'package:sarang/src/theme_manager/values_manager.dart';
 
 class PeopleLoveCardWidget extends StatelessWidget {
-  const PeopleLoveCardWidget({super.key});
+  const PeopleLoveCardWidget({super.key, required this.user});
+
+  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +18,11 @@ class PeopleLoveCardWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: AppPadding.p24),
       child: GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, PeopleProfileScreen.routeName);
+          Navigator.pushNamed(
+            context,
+            PeopleProfileScreen.routeName,
+            arguments: user,
+          );
         },
         child: Container(
           margin: const EdgeInsets.only(bottom: AppMargin.m18),
@@ -27,18 +34,18 @@ class PeopleLoveCardWidget extends StatelessWidget {
             leading: Container(
               width: 70,
               height: 70,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   image: AssetImage(
-                    "${AssetImageIconManager.assetPath}people_love_3.png",
+                    user.imagePath,
                   ),
                 ),
               ),
             ),
             title: Text(
-              "Ismirada",
+              user.fullName,
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
               style: getWhiteTextStyle().copyWith(
@@ -46,7 +53,7 @@ class PeopleLoveCardWidget extends StatelessWidget {
                   fontWeight: FontWeightManager.semiBold),
             ),
             subtitle: Text(
-              "24, Doctor",
+              "${user.age}, ${user.occupation}",
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
               style:

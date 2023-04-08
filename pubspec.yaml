@@ -39,6 +39,7 @@ dependencies:
   flutter_bloc: ^8.1.2
   image_picker: ^0.8.7+1
   shared_preferences: ^2.1.0
+  appinio_swiper: ^2.0.0
 
 dev_dependencies:
   flutter_test:
