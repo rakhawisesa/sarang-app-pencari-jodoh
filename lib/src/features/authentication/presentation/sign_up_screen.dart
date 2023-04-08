@@ -4,6 +4,8 @@ import 'package:sarang/src/common_widgets/custom_button_widget.dart';
 import 'package:sarang/src/common_widgets/custom_text_button_widget.dart';
 import 'package:sarang/src/common_widgets/custom_text_field_widget.dart';
 import 'package:sarang/src/features/authentication/presentation/sign_up_age_job_screen.dart';
+import 'package:sarang/src/theme_manager/font_manager.dart';
+import 'package:sarang/src/theme_manager/style_manager.dart';
 import 'package:sarang/src/theme_manager/values_manager.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -26,6 +28,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
     emailController.clear();
     passwordController.clear();
     super.dispose();
+  }
+
+  String? validationInput() {
+    if (nameController.text.isEmpty ||
+        emailController.text.isEmpty ||
+        passwordController.text.isEmpty) {
+      return "Name or Email or Password can't be empty";
+    }
+
+    if (nameController.text.length < 4 ||
+        emailController.text.length < 4 ||
+        passwordController.text.length < 4) {
+      return "Too short, minimum 4 characters";
+    }
+
+    if (!emailController.text.contains("@")) {
+      return "Invalid email";
+    }
+
+    return null;
   }
 
   @override
@@ -67,7 +89,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
               CustomButtonWidget(
                 title: "Get Started",
                 onTap: () {
-                  Navigator.pushNamed(context, SignUpAgeJobScreen.routeName);
+                  final message = validationInput();
+                  if (message != null) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                      message,
+                      textAlign: TextAlign.center,
+                      style: getWhiteTextStyle().copyWith(
+                        fontWeight: FontWeightManager.semiBold,
+                      ),
+                    )));
+                    return;
+                  }
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SignUpAgeJobScreen(
+                          fullname: nameController.text,
+                          email: emailController.text,
+                          password: passwordController.text,
+                        ),
+                      ));
                 },
               ),
               const SizedBox(
